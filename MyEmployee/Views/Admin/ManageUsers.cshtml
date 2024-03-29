@@ -1,0 +1,76 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model IEnumerable<ApplicationUser>
+@{
+    ViewData["Title"] = "Manage Users";
+}
+<link rel="stylesheet" href="~/css/AdminTable.css" />
+
+<h1>Users:</h1>
+    <div class="container m-3">
+        <div class="row">
+            <form class="col-3 m-auto" asp-controller="Admin" asp-action="ManageUsers" method="get">
+                <div class="input-group">
+                    <input type="search" style="border-radius: 12px" class="form-control shadow-none" placeholder="search" name="searchString" />
+                    <button type="submit" style="border: none; background-color: transparent" ><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(Model => Model.Id)</th>
+                <th>@Html.DisplayNameFor(Model => Model.Email)</th>
+                <th>@Html.DisplayNameFor(Model => Model.EmailConfirmed)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var user in Model)
+            {
+                if(user.UserName!=User.Identity.Name)  
+                {
+                <tr>
+                    <td>@user.Id</td>
+                    <td>@user.Email</td>
+                    <td>@user.EmailConfirmed</td>
+                        <td class="btns">
+                            <a asp-controller="Admin" asp-action="EditUser" asp-route-id="@user.Id">
+                                <button class="btn btn-primary ">Edit</button>
+                            </a>
+                            <form id="deleteForm" method="post" asp-controller="Admin" asp-action="DeleteUser" asp-route-id="@user.Id" onsubmit="return DisplayAlert(event)" >
+                                <input type="hidden" value="@user.Id"/>
+                                <button class="btn btn-danger btns" >Delete</button>
+                            </form>
+                        </td>
+                </tr>
+                }
+            }
+        </tbody>
+    </table>
+@section Scripts{
+    <script>
+        function DisplayAlert(e)
+        {
+            e.preventDefault();
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "Your file has been deleted.",
+                        icon: "success"
+                    });
+                    document.getElementById("deleteForm").submit();
+                }
+            });
+            return false;
+        }
+    </script>
+}

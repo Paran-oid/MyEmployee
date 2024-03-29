@@ -1,0 +1,38 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model IEnumerable<ApplicationRole>
+@{
+
+    ViewData["Title"] = "Manage Roles";
+}
+<link rel="stylesheet" href="~/css/AdminTable.css" />
+
+<h1>Roles:</h1>
+<a asp-controller="Admin" asp-action="CreateRole"><p>Create role</p></a>
+<hr />
+
+@if (Model != null && Model.Any())
+{
+    <table>
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(Model => Model.Id)</th>
+                <th>@Html.DisplayNameFor(Model => Model.Name)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var role in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => role.Id)</td>
+                    <td>@Html.DisplayFor(modelItem => role.Name)</td>
+                    <td><div style="width: 25px; height: 25px; background-color:@role.Color; border-radius: 30px; text-align"></div></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No Roles</p>
+}

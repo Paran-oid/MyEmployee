@@ -1,0 +1,47 @@
+﻿@model MyEmployee.Models.ApplicationRole
+@{
+    ViewData["Title"] = "Create Role";
+}
+<style>
+    .color-input input[type="color"] {
+        appearance: none;
+        -webkit-appearance: none;
+        border: none;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        cursor: pointer;
+        vertical-align: middle;
+    }
+
+        .color-input input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+
+        .color-input input[type="color"]::-webkit-color-swatch {
+            border: none;
+            border-radius: 50%;
+        }
+</style>
+<div class="container">
+    <div class="row">
+        <h1>Create Role</h1>
+        <form method="post" asp-controller="Admin" asp-action="CreateRole" >
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+            <div class="col-md-3">
+                <label asp-for="@Model.Name">Name :</label>
+                <input asp-for="@Model.Name" class="form-control" aria-required="true" placeholder="Role's name" />
+                <span asp-validation-for="@Model.Name" class="text-danger" ></span>
+            </div>
+            <div class="col-md-3 mt-3 color-input">
+                <label asp-for="@Model.Color">Color :</label>
+                <input type="color" asp-for="@Model.Color" aria-required="true"/>
+                <span asp-validation-for="@Model.Color" class="text-danger"></span>
+            </div>
+            <div class="col-3 mt-4">
+                <button type="submit" class="btn btn-success">Create</button>
+                <button class="btn btn-light">Go Back</button>
+            </div>
+        </form>
+    </div>
+</div>

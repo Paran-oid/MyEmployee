@@ -1,0 +1,16 @@
+﻿td, tr {
+    text-align: center;
+}
+
+table {
+    table-layout: auto;
+}
+
+td {
+    width: 25%;
+}
+
+.btns
+{
+    display: flex;
+}
