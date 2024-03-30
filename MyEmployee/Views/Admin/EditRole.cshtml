@@ -1,0 +1,49 @@
+﻿@model MyEmployee.Models.ApplicationRole
+@using Microsoft.AspNetCore.Identity
+@{
+    var role = Model.Name;
+    ViewData["Title"] = $"Edit {role}";
+}
+<style>
+    .color-input input[type="color"] {
+        appearance: none;
+        -webkit-appearance: none;
+        border: none;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        cursor: pointer;
+        vertical-align: middle;
+    }
+
+        .color-input input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+
+        .color-input input[type="color"]::-webkit-color-swatch {
+            border: none;
+            border-radius: 50%;
+        }
+</style>
+<h1>Edit Role</h1>
+<div class="container">
+    <div class="row">
+        <form method="post" asp-action="EditRole" asp-controller="Admin">
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+            <div class="form-floating col-md-3 mb-3 mt-3">
+                <input asp-for="@Model.Name" class="form-control" aria-required="true" />
+                <label asp-for="@Model.Name">Name</label>
+                <span asp-validation-for="@Model.Name" class="text-danger"></span>
+            </div>
+            <div class="col-md-3 mb-3 color-input">
+                <label asp-for="@Model.Color">Color :</label>
+                <input type="color" asp-for="@Model.Color" aria-required="true" />
+                <span asp-validation-for="@Model.Color" class="text-danger"></span>
+            </div>
+            <div class="d-flex">
+                <button class="btn btn-success" style="margin-right: 10px" type="submit">Save</button>
+                <a asp-action="ManageRoles"><button class="btn btn-light" type="button">Go Back</button></a>
+            </div>
+        </form>
+    </div>
+</div>

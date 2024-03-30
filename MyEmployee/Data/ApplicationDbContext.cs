@@ -10,7 +10,9 @@ namespace MyEmployee.Data
             : base(options)
         {
         }
+        //USER SIDE
         DbSet<ApplicationUser> ApplicationUsers { get; set; }
         DbSet<ApplicationRole> ApplicationRoles { get; set; }
+
     }
 }

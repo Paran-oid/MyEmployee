@@ -2,20 +2,44 @@
 @model IEnumerable<ApplicationUser>
 @{
     ViewData["Title"] = "Manage Users";
+    string message = (string)TempData["message"];
+    int numUsers = Model.ToList().Count;
+    //we check if numusers - 1 >=0 if yes we put num users - 1 else we put 0
+    int temp = numUsers - 1 >= 0 ? numUsers - 1 : 0;
+
 }
 <link rel="stylesheet" href="~/css/AdminTable.css" />
 
 <h1>Users:</h1>
-    <div class="container m-3">
-        <div class="row">
-            <form class="col-3 m-auto" asp-controller="Admin" asp-action="ManageUsers" method="get">
-                <div class="input-group">
-                    <input type="search" style="border-radius: 12px" class="form-control shadow-none" placeholder="search" name="searchString" />
-                    <button type="submit" style="border: none; background-color: transparent" ><i class="fa-solid fa-magnifying-glass"></i></button>
-                </div>
-            </form>
-        </div>
+@if (!string.IsNullOrEmpty(message))
+{
+    <div style="background-color: #4CAF50; /* Green */
+                color: white;
+                text-align: center;
+                padding: 15px;
+                width: 100%;
+                    ">
+        @TempData["message"]
     </div>
+}
+<div class="container m-3">
+    <div class="row">
+        <form class="col-3 m-auto" asp-controller="Admin" asp-action="ManageUsers" method="get">
+            <div class="input-group">
+                <input type="search" style="border-radius: 12px" class="form-control shadow-none" placeholder="search" name="searchString" />
+                <button type="submit" style="border: none; background-color: transparent"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+        </form>
+    </div>
+</div>
+@if (!Model.Any() || numUsers <= 1)
+{
+    <p>@temp found</p>
+    <p>No result</p>
+}
+else
+{
+    <p>@temp found </p>
     <table>
         <thead>
             <tr>
@@ -25,28 +49,29 @@
             </tr>
         </thead>
         <tbody>
-            @foreach(var user in Model)
+            @foreach (var user in Model)
             {
-                if(user.UserName!=User.Identity.Name)  
+                if (user.UserName != User.Identity.Name)
                 {
-                <tr>
-                    <td>@user.Id</td>
-                    <td>@user.Email</td>
-                    <td>@user.EmailConfirmed</td>
+                    <tr>
+                        <td>@user.Id</td>
+                        <td>@user.Email</td>
+                        <td>@user.EmailConfirmed</td>
                         <td class="btns">
                             <a asp-controller="Admin" asp-action="EditUser" asp-route-id="@user.Id">
                                 <button class="btn btn-primary ">Edit</button>
                             </a>
-                            <form id="deleteForm" method="post" asp-controller="Admin" asp-action="DeleteUser" asp-route-id="@user.Id" onsubmit="return DisplayAlert(event)" >
-                                <input type="hidden" value="@user.Id"/>
-                                <button class="btn btn-danger btns" >Delete</button>
+                            <form id="deleteForm" method="post" asp-controller="Admin" asp-action="DeleteUser" asp-route-id="@user.Id" onsubmit="return DisplayAlert(event)">
+                                <input type="hidden" value="@user.Id" />
+                                <button class="btn btn-danger btns">Delete</button>
                             </form>
                         </td>
-                </tr>
+                    </tr>
                 }
             }
         </tbody>
     </table>
+}
 @section Scripts{
     <script>
         function DisplayAlert(e)
@@ -67,7 +92,9 @@
                         text: "Your file has been deleted.",
                         icon: "success"
                     });
-                    document.getElementById("deleteForm").submit();
+                    setTimeout(function () {
+                        document.getElementById("deleteForm").submit();
+                    }, 1000);
                 }
             });
             return false;

@@ -26,7 +26,14 @@
                 <tr>
                     <td>@Html.DisplayFor(modelItem => role.Id)</td>
                     <td>@Html.DisplayFor(modelItem => role.Name)</td>
-                    <td><div style="width: 25px; height: 25px; background-color:@role.Color; border-radius: 30px; text-align"></div></td>
+                    <td>
+                        <div class="d-flex justify-content-between">
+                            <div style="width: 25px; height: 25px; background-color:@role.Color; border-radius: 30px; text-align"></div>
+                            <a style="color: black; text-decoration: none;" asp-controller="Admin" asp-action="EditRole" asp-route-id="@role.Id">
+                                <i class="fa-solid fa-bars"></i>
+                            </a>
+                        </div>
+                    </td>
                 </tr>
             }
         </tbody>
