@@ -5,10 +5,11 @@ using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.EntityFrameworkCore;
 using MyEmployee.Models;
 using MyEmployee.Models.Admin_Management;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MyEmployee.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -96,7 +97,7 @@ namespace MyEmployee.Controllers
             //return the user with problems to same page
             return View(model);
         }
-        //SELECT AN ID DELETE
+        //DELETE USER
         public async Task<IActionResult> DeleteUser(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
@@ -137,13 +138,18 @@ namespace MyEmployee.Controllers
         {
             if (ModelState.IsValid)
             {
-                    var role = new ApplicationRole()
-                    {
-                        Name = model.Name,
-                        Color = model.Color
-                    };
-                    await _roleManager.CreateAsync(role);
-                    return RedirectToAction("ManageRoles");
+                var role = new ApplicationRole()
+                {
+                    Name = model.Name,
+                    Color = model.Color
+                };
+                await _roleManager.CreateAsync(role);
+                if (string.IsNullOrEmpty(role.Name))
+                {
+                    return BadRequest();
+                }
+                TempData["message"] = $"{role.Name} was created";
+                return RedirectToAction("ManageRoles");
             }
             return View(model);
         }
@@ -171,11 +177,113 @@ namespace MyEmployee.Controllers
                 {
                     return NotFound();
                 }
-                role.Name = model.Name;
+                role.Name = string.IsNullOrEmpty(model.Name) ? role.Name : model.Name;
                 role.Color = model.Color;
                 await _roleManager.UpdateAsync(role);
-
+                TempData["editmessage"] = $"{role.Name} was modified";
                 return RedirectToAction("ManageRoles");
+            }
+            return View(model);
+        }
+
+        //DELETE ROLE POST 
+        public async Task<IActionResult> DeleteRole(string? Id)
+        {
+            var role = await _roleManager.FindByIdAsync(Id);
+            if (role == null)
+            {
+                return NotFound();
+            }
+            var result = await _roleManager.DeleteAsync(role);
+            if (result.Succeeded)
+            {
+                TempData["deletemessage"] = $"{role.Name} was deleted";
+                return RedirectToAction("ManageRoles");
+            }
+            return View("EditRole");
+        }
+
+
+        //ADD ADMIN 
+
+        //ADD ADMIN GET 
+
+        [Authorize(Roles ="Manager")]
+
+        [HttpGet]
+        public IActionResult AddRemAdmin()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "Manager")]
+        //ADD ADMIN POST
+        [HttpPost]
+        public async Task<IActionResult> AddRemAdmin(string action, ApplicationUser model)
+        {
+            //WE CHECK IF THE USER EXISTS
+            string? temp = model.Id?.Trim();
+
+            var user = await _userManager.FindByIdAsync(temp);
+
+            if(user == null)
+            {
+                return NotFound();
+            }
+            
+            if (action == "add")
+            {
+                //WE CHECK HIS CURRENT ROLES AND SEE IF HE IS ALREADY AN ADMIN
+                var roles = await _userManager.GetRolesAsync(user);
+
+                if (roles.Contains("Admin"))
+                {
+                    ModelState.AddModelError("", "User is already an admin");
+                    return View(model);
+                }
+
+                //WE ADD THE USER
+                var result = await _userManager.AddToRoleAsync(user, "Admin");
+
+                if (result.Succeeded)
+                {
+                    TempData["message"] = $"{user.FirstName} was added to admins";
+                    return RedirectToAction("Index");
+                }
+                //IF WE FACE ANY PROBLEM WE SHOW THE ERRORS
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+                }
+            }
+            else if (action == "remove" )
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                //WE CHECK IF HE DOESNT HAVE THE ADMIN ROLE
+                if (!roles.Contains("Admin"))
+                {
+                    ModelState.AddModelError("", "User is not an admin");
+                    return View(model);
+                }
+                //WE REMOVE THE USER
+                var result = await _userManager.RemoveFromRoleAsync(user, "Admin");
+
+                if (result.Succeeded)
+                {
+                    TempData["message"] = $"{user.UserName} was removed from admins";
+                    return RedirectToAction("Index");
+                }
+                //IF WE FACE ANY PROBLEM WE SHOW THE ERRORS
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+                }
             }
             return View(model);
         }

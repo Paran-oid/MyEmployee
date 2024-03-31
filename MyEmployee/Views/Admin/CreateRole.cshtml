@@ -26,7 +26,7 @@
 <div class="container">
     <div class="row">
         <h1>Create Role</h1>
-        <form method="post" asp-controller="Admin" asp-action="CreateRole" >
+        <form method="post" id="createForm" asp-controller="Admin" asp-action="CreateRole" >
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
             <div class="col-md-3">
                 <label asp-for="@Model.Name">Name :</label>
@@ -39,9 +39,26 @@
                 <span asp-validation-for="@Model.Color" class="text-danger"></span>
             </div>
             <div class="col-3 mt-4">
-                <button type="submit" class="btn btn-success">Create</button>
-                <button class="btn btn-light">Go Back</button>
+                <button type="submit" onclick="return DisplayAlert(event)" class="btn btn-success">Create</button>
+                <a asp-action="ManageRoles"><button type="button" class="btn btn-light">Go Back</button></a>
             </div>
         </form>
     </div>
 </div>
+@section Scripts
+{
+    <script>
+        function DisplayAlert(e)
+        {
+            e.preventDefault();
+            Swal.fire({
+                icon: "info",
+                title: "Your role is being created",
+                showConfirmButton: false,
+            })
+            setTimeout(function () {
+                document.getElementById("createForm").submit();
+            }, 2000);
+        }
+    </script>
+}

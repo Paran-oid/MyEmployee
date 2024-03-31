@@ -2,13 +2,30 @@
 @{
     ViewData["Title"] = "AdminPanel";
 }
+<style>
+    a {
+        color: black;
+        text-decoration: none
+    }
+
+    a:hover
+    {
+        color: dimgray;
+    }
+</style>
 <div class="container">
     <div class="row">
         <h1><img src="~/Site Images/Admin/gear-1119298_640.png" style="width: 64px; height: auto" /> Admin Panel</h1>
-        <ul class="col offset-1 mt-3">
-            <li><a asp-action="ManageUsers" asp-controller="Admin">Manage Users</a></li>
-            <li><a asp-action="ManageRoles" asp-controller="Admin">Manage Roles</a></li>
-        </ul>
+        @if (!string.IsNullOrEmpty((string?)TempData["message"]))
+        {
+            <span style="color: #ccb12d"> @TempData["message"] </span>
+        }
+        <div class="col offset-1 mt-3" >
+            <p><a asp-action="ManageUsers" asp-controller="Admin"><i class="fa-regular fa-newspaper"></i>  Audit Log</a></p>
+            <p><a asp-action="ManageUsers" asp-controller="Admin"><i class="fa-solid fa-users"></i>  Manage Users</a></p>
+            <p><a asp-action="ManageRoles" asp-controller="Admin"><i class="fa-solid fa-briefcase"></i>  Manage Roles</a></p>
+            <p><a asp-action="AddRemAdmin" asp-controller="Admin"><i class="fa-solid fa-hammer"></i>  Add/Remove Admin[Manager ONLY]</a></p>
+        </div>
     </div>
 </div>
 

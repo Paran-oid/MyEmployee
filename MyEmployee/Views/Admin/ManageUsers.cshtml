@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @model IEnumerable<ApplicationUser>
+@inject UserManager<ApplicationUser> UserManager
 @{
     ViewData["Title"] = "Manage Users";
     string message = (string)TempData["message"];
@@ -46,6 +47,7 @@ else
                 <th>@Html.DisplayNameFor(Model => Model.Id)</th>
                 <th>@Html.DisplayNameFor(Model => Model.Email)</th>
                 <th>@Html.DisplayNameFor(Model => Model.EmailConfirmed)</th>
+                <th>Admin</th>
             </tr>
         </thead>
         <tbody>
@@ -54,9 +56,25 @@ else
                 if (user.UserName != User.Identity.Name)
                 {
                     <tr>
-                        <td>@user.Id</td>
+                        @if (await UserManager.IsInRoleAsync(user, "Manager"))
+                        {
+                            <td style="color: indianred">@user.Id</td>
+
+                        }
+                        else
+                        {
+                            <td>@user.Id</td>
+                        }
                         <td>@user.Email</td>
                         <td>@user.EmailConfirmed</td>
+                        @if (await UserManager.IsInRoleAsync(user,"Admin"))
+                        {
+                            <td>True</td>
+                        }
+                        else
+                        {
+                            <td>False</td>
+                        }
                         <td class="btns">
                             <a asp-controller="Admin" asp-action="EditUser" asp-route-id="@user.Id">
                                 <button class="btn btn-primary ">Edit</button>
@@ -89,7 +107,7 @@ else
                 if (result.isConfirmed) {
                     Swal.fire({
                         title: "Deleted!",
-                        text: "Your file has been deleted.",
+                        text: "Your user has been deleted.",
                         icon: "success"
                     });
                     setTimeout(function () {

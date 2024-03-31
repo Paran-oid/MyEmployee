@@ -1,0 +1,71 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model ApplicationUser
+@{
+    ViewData["Title"] = "Add Admin";
+}
+<h1 class="text-center">Add Admin</h1>
+<div class="container d-flex justify-content-center align-items-center" style="height: 40vh">
+    <div class="row">
+        <form class="col" id="addForm" method="post" asp-action="AddRemAdmin" asp-controller="Admin" >
+            <div class="input-group mb-4">
+                <label asp-for="@Model.Id" class="col-12 text-center mb-3"><b>Paste the user id</b></label>
+                <div class="col-sm-3">
+                    <label class="visually-hidden" for="action">Preference</label>
+                    <select class="form-select" id="action" name="action">
+                        <option selected disabled>Select</option>
+                        <option value="add">Add</option>
+                        <option value="remove">Remove</option>
+                    </select>
+                </div>
+                <input asp-for="@Model.Id" type="text" class="form-control shadow-none text-center offset-1" aria-required="true" placeholder="user_id" />
+                <span asp-validation-for="@Model.Id" class="text-danger"></span>
+                <button class="btn btn-success" onclick="return DisplayAlert(event)" type="submit" >Add</button>
+            </div>
+            <div asp-validation-summary="ModelOnly" class="text-danger fw-bold" role="alert"></div>
+        </form>
+    </div>
+</div>
+@section Scripts
+{
+    <script>
+        function DisplayAlert(e)
+        {
+            e.preventDefault();
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: "btn btn-success",
+                    cancelButton: "btn btn-danger"
+                },
+                buttonsStyling: false
+            });
+            swalWithBootstrapButtons.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                cancelButtonText: "No",
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    swalWithBootstrapButtons.fire({
+                        title: "Procedure Done!",
+                        text: "Your changes have been sent.",
+                        icon: "success"
+                    });
+                    setTimeout(function () {
+                        document.getElementById("addForm").submit();
+                    }, 2000);
+                } else if (
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    swalWithBootstrapButtons.fire({
+                        title: "Cancelled",
+                        text: "Your user wasn't modified.",
+                        icon: "error"
+                    });
+                }
+            });
+        }
+    </script>
+}

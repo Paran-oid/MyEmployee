@@ -25,10 +25,15 @@
             border-radius: 50%;
         }
 </style>
-<h1>Edit Role</h1>
+<a asp-action="ManageRoles"><img src="~/Site Images/Admin/left-arrow-in-circular-button-black-symbol.png" style="float: left; height: 60px; width: 60px; margin-right: 100px" /></a>
+<h1>Edit Role
+<a id="deleteForm" asp-action="DeleteRole" asp-route-id="@Model.Id">
+    <button data-toggle="tooltip" data-placement="top" title="Delete role" onclick="return DisplayDeleteAlert()" class="fa-solid fa-trash offset-1" style="background: none; border: none; "></button>
+</a>
+</h1>
 <div class="container">
     <div class="row">
-        <form method="post" asp-action="EditRole" asp-controller="Admin">
+        <form method="post" id="editForm" asp-action="EditRole" asp-controller="Admin">
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
             <div class="form-floating col-md-3 mb-3 mt-3">
                 <input asp-for="@Model.Name" class="form-control" aria-required="true" />
@@ -41,9 +46,40 @@
                 <span asp-validation-for="@Model.Color" class="text-danger"></span>
             </div>
             <div class="d-flex">
-                <button class="btn btn-success" style="margin-right: 10px" type="submit">Save</button>
-                <a asp-action="ManageRoles"><button class="btn btn-light" type="button">Go Back</button></a>
+                <button class="btn btn-success" style="margin-right: 10px" onclick="return DisplayAlert(event)" type="submit">Save</button>
             </div>
         </form>
     </div>
 </div>
+@section Scripts
+{
+    <script>
+        function DisplayAlert(e)
+        {
+            e.preventDefault();
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Your Role will be changed",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, Save it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: "Done!",
+                        text: "Your Role has been changed.",
+                        icon: "success",
+                        timer: 2000,
+                        timerProgressBar: true,
+                        showConfirmButton: false
+                    });
+                    setTimeout(function () {
+                        document.getElementById("editForm").submit();
+                    }, 2000);
+                }
+            });
+        }
+    </script>
+}
