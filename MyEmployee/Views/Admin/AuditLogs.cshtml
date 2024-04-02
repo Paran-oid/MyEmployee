@@ -1,0 +1,37 @@
+﻿@using MyEmployee.Models.Admin_Management
+@model IEnumerable<ApplicationLog>
+@{
+    ViewData["Title"] = "Audit Logs";
+}
+
+<h1 class="mt-4 mb-4">Audit Logs</h1>
+
+<div class="container">
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-6 mb-3">
+                <div class="card border-secondary">
+                    <div class="card-body">
+                        @if (item.Level == "Information")
+                        {
+                            <h5 class="card-title text-success">@item.Level</h5>
+                        }
+                        else if (item.Level == "Warning")
+                        {
+                            <h5 class="card-title text-warning">@item.Level</h5>
+                        }
+                        else
+                        {
+                            <h5 class="card-title text-danger">@item.Level</h5>
+                        }
+                        <p class="card-text font-monospace">@item.Action</p>
+                    </div>
+                    <div class="card-footer bg-transparent border-top-0">
+                        <small class="text-muted">[@item.TimeStamp.DateTime] @item.Username</small>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

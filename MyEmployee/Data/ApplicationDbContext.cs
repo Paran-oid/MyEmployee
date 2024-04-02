@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MyEmployee.Models;
+using MyEmployee.Models.Admin_Management;
 
 namespace MyEmployee.Data
 {
@@ -10,9 +11,10 @@ namespace MyEmployee.Data
             : base(options)
         {
         }
-        //USER SIDE
-        DbSet<ApplicationUser> ApplicationUsers { get; set; }
-        DbSet<ApplicationRole> ApplicationRoles { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<ApplicationRole> ApplicationRoles { get; set; }
+
+        public DbSet<ApplicationLog> ApplicationLogs { get; set; }
 
     }
 }

@@ -19,8 +19,21 @@
                 text-align: center;
                 padding: 15px;
                 width: 100%;
+                margin-bottom: 15px;
                     ">
         @TempData["message"]
+    </div>
+}
+@if (!string.IsNullOrEmpty((string?)TempData["deleted"]))
+{
+    <div style="background-color: indianred; /* Green */
+                color: white;
+                text-align: center;
+                padding: 15px;
+                width: 100%;
+                margin-bottom: 15px;
+                        ">
+        @TempData["deleted"]
     </div>
 }
 <div class="container m-3">
@@ -41,8 +54,8 @@
 else
 {
     <p>@temp found </p>
-    <table>
-        <thead>
+    <table class="table table-borderless">
+        <thead class="table-warning">
             <tr>
                 <th>@Html.DisplayNameFor(Model => Model.Id)</th>
                 <th>@Html.DisplayNameFor(Model => Model.Email)</th>
@@ -56,16 +69,16 @@ else
                 if (user.UserName != User.Identity.Name)
                 {
                     <tr>
+                        <td>@user.Id</td>
                         @if (await UserManager.IsInRoleAsync(user, "Manager"))
                         {
-                            <td style="color: indianred">@user.Id</td>
+                            <td>@user.Email <br /> <span style="color: red">MANAGER</span></td>
 
                         }
                         else
                         {
-                            <td>@user.Id</td>
+                            <td>@user.Email</td>
                         }
-                        <td>@user.Email</td>
                         <td>@user.EmailConfirmed</td>
                         @if (await UserManager.IsInRoleAsync(user,"Admin"))
                         {

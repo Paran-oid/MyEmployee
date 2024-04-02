@@ -10,22 +10,21 @@
 <a asp-controller="Admin" asp-action="CreateRole"><p>Create role</p></a>
 @if (!string.IsNullOrEmpty((string?)TempData["message"]))
 {
-    <div class="text-center" style="color: white; background-color: green; padding: 20px; ">@TempData["message"]</div>
+    <div class="text-center" style="color: white; background-color: green; padding: 20px;margin-bottom: 15px ">@TempData["message"]</div>
 }
 else if (!string.IsNullOrEmpty((string?)TempData["deletemessage"]))
 {
-    <div class="text-center" style="color: white; background-color: darkred; padding: 20px; ">@TempData["deletemessage"]</div>
+    <div class="text-center" style="color: white; background-color: darkred; padding: 20px;margin-bottom: 15px ">@TempData["deletemessage"]</div>
 }
 else if (!string.IsNullOrWhiteSpace((string?)TempData["editmessage"]))
 {
-    <div class="text-center" style="color: white; background-color: royalblue; padding: 20px; ">@TempData["editmessage"]</div>
+    <div class="text-center" style="color: white; background-color: royalblue; padding: 20px;  margin-bottom: 15px ">@TempData["editmessage"]</div>
 }
-<hr />
 
 @if (Model != null && Model.Any())
 {
-    <table>
-        <thead>
+    <table class="table table-borderless">
+        <thead class="table-warning">
             <tr>
                 <th>@Html.DisplayNameFor(Model => Model.Id)</th>
                 <th>@Html.DisplayNameFor(Model => Model.Name)</th>

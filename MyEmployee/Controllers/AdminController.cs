@@ -3,40 +3,47 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.EntityFrameworkCore;
+using MyEmployee.Data;
+using MyEmployee.Data.Services;
 using MyEmployee.Models;
 using MyEmployee.Models.Admin_Management;
+using System.Data;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MyEmployee.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,Manager")]
     public class AdminController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
+        private readonly ILogServices _logServices;
 
-        public AdminController(RoleManager<ApplicationRole> roleManager, UserManager<ApplicationUser> userManager)
+        public AdminController(RoleManager<ApplicationRole> roleManager, UserManager<ApplicationUser> userManager, ILogServices logServices)
         {
             _userManager = userManager;
             _roleManager = roleManager;
-        }
+            _logServices = logServices;
 
+        }
+        //INDEX PAGE
         public IActionResult Index()
         {
             return View();
         }
+
         //USERS SECTION
 
         //SELECT ALL USERS
         [HttpGet]
         public async Task<IActionResult> ManageUsers(string? searchString)
         {
-            var roles = await _userManager.Users.ToListAsync();
+            var users = await _userManager.Users.ToListAsync();
             if(!string.IsNullOrEmpty(searchString))
             {
-                roles = await _userManager.Users.Where(u => u.UserName.Contains(searchString)).ToListAsync();
+                users = await _userManager.Users.Where(u => u.UserName.Contains(searchString)).ToListAsync();
             }
-            return View(roles);
+            return View(users);
         }
         //EDIT USER GET
         [HttpGet]
@@ -83,6 +90,7 @@ namespace MyEmployee.Controllers
                 var result = await _userManager.UpdateAsync(user);
                 if (result.Succeeded)
                 {
+                    await _logServices.LogInformationAsync($"{user.UserName} was edited", User.Identity.Name);
                     TempData["message"] = "Changes has been saved!";
                     return RedirectToAction("ManageUsers");
                 }
@@ -108,6 +116,8 @@ namespace MyEmployee.Controllers
             var result = await _userManager.DeleteAsync(user);
             if (result.Succeeded)
             {
+                await _logServices.LogInformationAsync($"{user.UserName} was deleted", User.Identity.Name);
+                TempData["deleted"] = $"{user.UserName} was deleted successfully";
                 return RedirectToAction("ManageUsers");
             }
             return View("ManageUsers");
@@ -148,6 +158,7 @@ namespace MyEmployee.Controllers
                 {
                     return BadRequest();
                 }
+                await _logServices.LogInformationAsync($"{role.Name} was created", User.Identity.Name);
                 TempData["message"] = $"{role.Name} was created";
                 return RedirectToAction("ManageRoles");
             }
@@ -163,6 +174,10 @@ namespace MyEmployee.Controllers
             {
                 return NotFound();
             }
+            if ((role.Name == "Admin" || role.Name == "Manager" || role.Name == "User") && User.IsInRole("Admin"))
+            {
+                return Unauthorized();
+            }
             return View(role);
         }
 
@@ -177,9 +192,11 @@ namespace MyEmployee.Controllers
                 {
                     return NotFound();
                 }
+
                 role.Name = string.IsNullOrEmpty(model.Name) ? role.Name : model.Name;
                 role.Color = model.Color;
                 await _roleManager.UpdateAsync(role);
+                await _logServices.LogInformationAsync($"{role.Name} was modified", User.Identity.Name);
                 TempData["editmessage"] = $"{role.Name} was modified";
                 return RedirectToAction("ManageRoles");
             }
@@ -194,9 +211,14 @@ namespace MyEmployee.Controllers
             {
                 return NotFound();
             }
+            if ((role.Name == "Admin" || role.Name == "Manager" || role.Name == "User") && User.IsInRole("Admin"))
+            {
+                return Unauthorized();
+            }
             var result = await _roleManager.DeleteAsync(role);
             if (result.Succeeded)
             {
+                await _logServices.LogInformationAsync($"{role.Name} was deleted", User.Identity.Name);
                 TempData["deletemessage"] = $"{role.Name} was deleted";
                 return RedirectToAction("ManageRoles");
             }
@@ -204,10 +226,10 @@ namespace MyEmployee.Controllers
         }
 
 
+
         //ADD ADMIN 
 
         //ADD ADMIN GET 
-
         [Authorize(Roles ="Manager")]
 
         [HttpGet]
@@ -247,6 +269,7 @@ namespace MyEmployee.Controllers
 
                 if (result.Succeeded)
                 {
+                    await _logServices.LogWarningAsync($"{user.FirstName} was added to admins", User.Identity.Name);
                     TempData["message"] = $"{user.FirstName} was added to admins";
                     return RedirectToAction("Index");
                 }
@@ -273,6 +296,7 @@ namespace MyEmployee.Controllers
 
                 if (result.Succeeded)
                 {
+                    await _logServices.LogWarningAsync($"{user.UserName} was removed from admins", User.Identity.Name);
                     TempData["message"] = $"{user.UserName} was removed from admins";
                     return RedirectToAction("Index");
                 }
@@ -286,6 +310,13 @@ namespace MyEmployee.Controllers
                 }
             }
             return View(model);
+        }
+
+        // LOGS
+        public async Task<IActionResult> AuditLogs()
+        {
+            var logs = _logServices.GetAll();
+            return View(logs);
         }
     }
 }

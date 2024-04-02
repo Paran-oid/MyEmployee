@@ -4,7 +4,7 @@
     ViewData["Title"] = "Add Admin";
 }
 <h1 class="text-center">Add Admin</h1>
-<div class="container d-flex justify-content-center align-items-center" style="height: 40vh">
+<div class="container d-flex justify-content-center align-items-center" style="height: 25vh">
     <div class="row">
         <form class="col" id="addForm" method="post" asp-action="AddRemAdmin" asp-controller="Admin" >
             <div class="input-group mb-4">
@@ -22,6 +22,7 @@
                 <button class="btn btn-success" onclick="return DisplayAlert(event)" type="submit" >Add</button>
             </div>
             <div asp-validation-summary="ModelOnly" class="text-danger fw-bold" role="alert"></div>
+            <img class="position-absolute" src="~/Site Images/Admin/justice.jpg" height="400px" width="475px" />
         </form>
     </div>
 </div>

@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MyEmployee.Data;
+using MyEmployee.Data.Services;
 using MyEmployee.Models;
+using System.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +17,9 @@ builder.Services.AddDefaultIdentity<ApplicationUser>()
     .AddRoles<ApplicationRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<ILogServices, LogServices>();
 
+//building app
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
