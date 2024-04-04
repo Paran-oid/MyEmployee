@@ -1,0 +1,98 @@
+﻿@model string[]
+@{
+    ViewData["Title"] = "JS functions";
+    var currentpage = Context.Request.Path + Context.Request.QueryString;
+    List<string> temp = new List<string>() { "Puissance", "PPCM", "PGCD" };
+}
+<h1 class="mb-5">@ViewData["Title"]</h1>
+@ViewData["Error"]
+<div class="container">
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            if (!temp.Contains(item))
+            {
+                <div class="col-md-4 mb-5">
+                    <button class="btn-light btn text-center btn-block col-6" onclick="DisplayAlert1('@item')">@item</button>
+                </div>
+            }
+            else
+            {
+                <div class="col-md-4 mb-5">
+                    <button class="btn-light btn text-center btn-block col-6" onclick="DisplayAlert2('@item')">@item</button>
+                </div>
+            }
+        }
+    </div>
+    <div class="col-6 m-auto text-center">
+        <label>Result:</label>
+        <input type="text"id="result" value="@TempData["Result"]" class="form-control text-center" disabled/>
+    </div>
+</div>
+@section Scripts
+{
+    <script>
+        function DisplayAlert1(item) { 
+            input = document.getElementById("result");
+            Swal.fire({
+                title: "Enter the value",
+                icon: "info",
+                input: "text",
+                inputPlaceholder: 'Enter your value',
+                showCancelButton: true,
+                confirmButtonText: 'Submit',
+                cancelButtonText: 'Cancel'
+            }).then((result) => 
+            {
+                if (result.isConfirmed && result.value)
+                {
+                    let Val = result.value;
+                    $.ajax({
+                        type: "POST",
+                        url: "/home/STISO",
+                        data: { button : item, value : Val},
+                        success: function (response) {
+                            input.value = response.result;
+                        }
+                    });
+                }
+                else 
+                {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Cancelled/Error"
+                    })
+                }
+            });
+        };
+        function DisplayAlert2(item) {
+            Swal.fire({
+                title: "Enter the first value",
+                text: "please enter an integer",
+                icon: "info",
+                input: "text",
+                inputPlaceholder: 'number',
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+            }).then((result) => {
+                if (result.isConfirmed && result.value) { 
+                    let val1 = parseInt(result.value);
+                    Swal.fire({
+                        title: "Enter the second value",
+                        text: "please enter an integer again",
+                        icon: "info",
+                        input: "text",
+                        inputPlaceholder: 'number',
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                    }).then((result) => {
+                        if (result.isConfirmed) { 
+                            let val2 = parseInt(result.value);
+                            // code goes here
+                        }
+                    });
+                }
+            });
+        };
+    </script>
+}

@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Privacy Policy";
+}
+<h1>@ViewData["Title"]</h1>
+
+<p>Use this page to detail your site's privacy policy.</p>
+
+<button id="button1">Click me</button>
+<div id="test"></div>
+
+@section Scripts
+{
+    <script>
+        // execute jQuery stuff
+        $(document).ready(function () {
+            //select the # (id) button onclick we will do a function
+            $("#button1").on('click', function () {
+
+                $("#test").load("/home/MyJson")
+                //this is where i do what happens onclick ( we go to my method and pick a function)
+                $.get("/home/MyJson", function (data) {
+                    //get the content of html or populate it
+                    $("#test").html(data.name)
+                    //$("something") is basically select an element ( id class etc )
+                });
+            });
+        });
+    </script>
+}
