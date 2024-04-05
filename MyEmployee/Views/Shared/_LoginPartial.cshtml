@@ -1,14 +1,22 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
-
+@{
+    int? atindex = User?.Identity?.Name?.IndexOf('@');
+    string? username =atindex.HasValue ? User?.Identity?.Name?.Substring(0, atindex.Value) : null;
+    if(!string.IsNullOrEmpty(username))
+    {
+        username = char.ToUpper(username[0]) + username.Substring(1);
+    }
+}
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
     <li class="nav-item">
-        <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
+        <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @username!</a>
     </li>
-    <li class="nav-item">
+        <li class="nav-item">
+
         <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
             <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
         </form>
