@@ -32,8 +32,8 @@
 @section Scripts
 {
     <script>
+        input = document.getElementById("result");
         function DisplayAlert1(item) { 
-            input = document.getElementById("result");
             Swal.fire({
                 title: "Enter the value",
                 icon: "info",
@@ -88,7 +88,14 @@
                     }).then((result) => {
                         if (result.isConfirmed) { 
                             let val2 = parseInt(result.value);
-                            // code goes here
+                            $.ajax({
+                                type: "POST",
+                                url: "/home/STIMO",
+                                data: { button: item, value1: val1, value2: val2 },
+                                success: function (response) {
+                                    input.value = response.result;
+                                }
+                            });
                         }
                     });
                 }

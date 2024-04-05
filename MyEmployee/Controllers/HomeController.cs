@@ -59,11 +59,38 @@ namespace MyEmployee.Controllers
                 case "Factoriel":
                     res = operation.Factoriel(value).ToString();
                     break;
-                //ADD REST OF CASES
+                case "Conversion Binaire":
+                    res = operation.CB(value).ToString();
+                    break;
+                case "Conversion Hexadecimal":
+                    res = operation.CH(value).ToString();
+                    break;
+                case "Conversion Binaire Hexadecimal":
+                    res = operation.CBH(value).ToString();
+                    break;
             }
             return Json(new { result = res });
         }
 
+        public JsonResult STIMO (string button, string value1, string value2)
+        {
+            var operation = new FunctionsJs();
+
+            string res = "";
+            switch(button)
+            {
+                case "Puissance":
+                    res = operation.Puissance(value1, value2).ToString();
+                    break;
+                case "PPCM":
+                    res = operation.PPCM(value1, value2).ToString();
+                    break;
+                case "PGCD":
+                    res = operation.PGCD(value1, value2).ToString();
+                    break;
+            }
+            return Json(new { result = res });
+        }
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
