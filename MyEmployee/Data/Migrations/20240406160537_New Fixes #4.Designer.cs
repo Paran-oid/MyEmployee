@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyEmployee.Data;
 
@@ -11,9 +12,11 @@ using MyEmployee.Data;
 namespace MyEmployee.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240406160537_New Fixes #4")]
+    partial class NewFixes4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -145,6 +148,23 @@ namespace MyEmployee.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "1",
+                            RoleId = "1"
+                        },
+                        new
+                        {
+                            UserId = "2",
+                            RoleId = "2"
+                        },
+                        new
+                        {
+                            UserId = "3",
+                            RoleId = "3"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -267,6 +287,59 @@ namespace MyEmployee.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "1",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "8f1adf6d-6820-4e20-bac5-069203ce8bb4",
+                            Email = "Aziz@example.com",
+                            EmailConfirmed = true,
+                            FirstName = "Aziz",
+                            LastName = "Hmidi",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "aziz@example.com",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJGSGrJ4rC6VOcDEjX6hLzWPM8LvaiuPEPc/lBOe9ZB6chBgna3GevEWAdLA+jMxlg==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "953b6fa6-bb6b-4d22-9347-a62b4e4349c0",
+                            TwoFactorEnabled = false,
+                            UserName = "Paranoid"
+                        },
+                        new
+                        {
+                            Id = "2",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "9066215c-0b5c-4627-a3c7-3d707a001027",
+                            Email = "Arslen@example.com",
+                            EmailConfirmed = true,
+                            FirstName = "Arslen",
+                            LastName = "Chabaanie",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "arslen@example.com",
+                            PasswordHash = "AQAAAAIAAYagAAAAEK08qn82q6aR6rAsUfjsj/ZoOOTGHvYerVPh5pcHlRNHmxTzu2gvOMAaGgMg7En9Ww==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "69296697-2a15-45d8-944d-9af4e38dd48d",
+                            TwoFactorEnabled = false,
+                            UserName = "Zenos"
+                        },
+                        new
+                        {
+                            Id = "3",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "8c37db7d-f434-4803-ad43-454f8cc22d76",
+                            Email = "adem@example.com",
+                            EmailConfirmed = true,
+                            FirstName = "Adem",
+                            LastName = "Tounsi",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "adem@example.com",
+                            PasswordHash = "AQAAAAIAAYagAAAAEDX3pgUweCJf7eO2oMkg8MOdp4LabaaQAkxScWPeDR/57pbKT2iYqFjZMKtSE8xuuA==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "3753ae6d-b4e3-4efd-a0da-df18aa75c577",
+                            TwoFactorEnabled = false,
+                            UserName = "EDP"
+                        });
                 });
 
             modelBuilder.Entity("MyEmployee.Models.ApplicationRole", b =>

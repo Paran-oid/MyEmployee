@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyEmployee.Data;
 
@@ -11,9 +12,11 @@ using MyEmployee.Data;
 namespace MyEmployee.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240406143008_New Fixes #1")]
+    partial class NewFixes1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -282,21 +285,21 @@ namespace MyEmployee.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1",
+                            Id = "d6f787b6-c854-4eaa-98f7-69acdb4da3ca",
                             Name = "Manager",
                             NormalizedName = "MANAGER",
                             Color = "#88b892"
                         },
                         new
                         {
-                            Id = "2",
+                            Id = "c4f7a115-924e-46d0-891e-76fc0df2a72b",
                             Name = "Admin",
                             NormalizedName = "ADMIN",
                             Color = "#72b5a8"
                         },
                         new
                         {
-                            Id = "3",
+                            Id = "d278a7a5-d948-4e16-820a-acf8b21e09cc",
                             Name = "User",
                             NormalizedName = "USER",
                             Color = "#86918f"

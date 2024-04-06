@@ -38,10 +38,15 @@ namespace MyEmployee.Controllers
         [HttpGet]
         public async Task<IActionResult> ManageUsers(string? searchString)
         {
-            var users = await _userManager.Users.ToListAsync();
-            if(!string.IsNullOrEmpty(searchString))
+            List<ApplicationUser> users;
+            if (!string.IsNullOrEmpty(searchString))
             {
-                users = await _userManager.Users.Where(u => u.UserName.Contains(searchString)).ToListAsync();
+                 users = await _userManager.Users.Where(u => u.UserName.Contains(searchString)).ToListAsync();
+            }
+            else
+            {
+                 users = await _userManager.Users.ToListAsync();
+
             }
             return View(users);
         }

@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using MyEmployee.Models;
 using System.Diagnostics;
 using System.IO;
-using Microsoft.AspNetCore.Mvc;
 using MyEmployee.Models.STI_functions;
 
 namespace MyEmployee.Controllers
@@ -30,9 +29,18 @@ namespace MyEmployee.Controllers
         {
             try
             {
-                string filePath = Path.Combine(_webHostEnvironment.WebRootPath, "files", "Buttons.txt");
-                string fileContent = System.IO.File.ReadAllText(filePath);
-                string[] lines = fileContent.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                string[] lines = new string[]
+            {
+                "Premier",
+                "Palindrome",
+                "Factoriel",
+                "Puissance",
+                "PPCM",
+                "PGCD",
+                "Conversion Binaire",
+                "Conversion Hexadecimal",
+                "Conversion Binaire Hexadecimal"
+            };
                 return View(lines);
             }
             catch (Exception e)

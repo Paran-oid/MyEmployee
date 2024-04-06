@@ -3,10 +3,10 @@
 @inject UserManager<ApplicationUser> UserManager
 @{
     ViewData["Title"] = "Manage Users";
-    string message = (string)TempData["message"];
+    string message = (string?)TempData["message"];
     int numUsers = Model.ToList().Count;
     //we check if numusers - 1 >=0 if yes we put num users - 1 else we put 0
-    int temp = numUsers - 1 >= 0 ? numUsers - 1 : 0;
+    int temp = numUsers - 1 > 0 ? numUsers - 1 : 1;
 
 }
 <link rel="stylesheet" href="~/css/AdminTable.css" />
@@ -46,7 +46,7 @@
         </form>
     </div>
 </div>
-@if (!Model.Any() || numUsers <= 1)
+@if (!Model.Any() || numUsers < 1)
 {
     <p>@temp found</p>
     <p>No result</p>
@@ -57,19 +57,20 @@ else
     <table class="table table-borderless">
         <thead class="table-warning">
             <tr>
-                <th>@Html.DisplayNameFor(Model => Model.Id)</th>
+                <th>@Html.DisplayNameFor(Model => Model.UserName)</th>
                 <th>@Html.DisplayNameFor(Model => Model.Email)</th>
                 <th>@Html.DisplayNameFor(Model => Model.EmailConfirmed)</th>
                 <th>Admin</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var user in Model)
             {
-                if (user.UserName != User.Identity.Name)
+                if (user.UserName != User?.Identity?.Name)
                 {
                     <tr>
-                        <td>@user.Id</td>
+                        <td>@user.UserName</td>
                         @if (await UserManager.IsInRoleAsync(user, "Manager"))
                         {
                             <td>@user.Email <br /> <span style="color: red">MANAGER</span></td>
@@ -88,13 +89,13 @@ else
                         {
                             <td>False</td>
                         }
-                        <td class="btns">
+                        <td class="d-flex justify-content-between alignt-items-center" width="150px">
                             <a asp-controller="Admin" asp-action="EditUser" asp-route-id="@user.Id">
-                                <button class="btn btn-primary ">Edit</button>
+                                <button class="btn btn-primary " style="width: 65px">Edit</button>
                             </a>
                             <form id="deleteForm" method="post" asp-controller="Admin" asp-action="DeleteUser" asp-route-id="@user.Id" onsubmit="return DisplayAlert(event)">
                                 <input type="hidden" value="@user.Id" />
-                                <button class="btn btn-danger btns">Delete</button>
+                                <button class="btn btn-danger " style="width: 65px">Delete</button>
                             </form>
                         </td>
                     </tr>

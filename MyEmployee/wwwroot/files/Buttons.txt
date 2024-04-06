@@ -1,9 +1,0 @@
-﻿Premier
-Palindrome
-Factoriel
-Puissance
-PPCM
-PGCD
-Conversion Binaire
-Conversion Hexadecimal
-Conversion Binaire Hexadecimal
