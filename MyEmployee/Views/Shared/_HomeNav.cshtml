@@ -1,0 +1,34 @@
+﻿<header>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #1f1e1d">
+        <div class="container-fluid">
+            <a class="navbar-brand" asp-action="Index" asp-controller="Home">My Employee</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item me-3">
+                        <a class="nav-link text-light" href="#Introduction">Introduction</a>
+                    </li>
+                    <li class="nav-item me-3">
+                        <a class="nav-link text-light" href="#Employees">Users</a>
+                    </li>
+                    <li class="nav-item me-3">
+                        <a class="nav-link text-light" href="#Groups">Groups</a>
+                    </li>
+                    <li class="nav-item me-3">
+                        <a class="nav-link text-light" href="#OS">Other</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link text-light" asp-area="Identity" asp-page="/Account/Register">Sign Up</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light" asp-area="Identity" asp-page="/Account/Login">Sign In</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
