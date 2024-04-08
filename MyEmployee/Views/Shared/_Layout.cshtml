@@ -14,28 +14,31 @@
 <body>
     @if (User.Identity.IsAuthenticated)
     {
-        <header>
-            <nav class="navbar navbar-expand-sm  bg-transparent navbar-light box-shadow mb-3">
+        <header class="mb-5">
+            <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #1f1e1d">
                 <div class="container-fluid">
-                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MyEmployee</a>
+                    <a class="navbar-brand" asp-area="" asp-controller="Main" asp-action="Overview">MyEmployee</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                             aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                        <ul class="navbar-nav flex-grow-1">
+                        <ul class="navbar-nav ms-auto">
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                                <a class="nav-link text-light ms-3" asp-area="" asp-controller="Main" asp-action="Overview"><i class="fa-solid fa-house"></i> Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="STI">STI</a>
+                                <a class="nav-link text-light ms-3" asp-area="" asp-controller="Main" asp-action="Employees"><i class="fa-solid fa-users"></i> Employees</a>
                             </li>
-                            @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index">AdminPanel</a>
-                                </li>
-                            }
+                            <li class="nav-item">
+                                <a class="nav-link text-light ms-3" asp-area="" asp-controller="Main" asp-action="Groups"><i class="fa-solid fa-layer-group"></i> Groups</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light ms-3" asp-area="" asp-controller="Main" asp-action="Projects"><i class="fa-solid fa-diagram-project"></i> Projects</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light ms-3" asp-area="" asp-controller="Home" asp-action="STI"><i class="fa-solid fa-computer"></i> STI</a>
+                            </li>
                         </ul>
                         <partial name="_LoginPartial" />
                     </div>
@@ -49,7 +52,9 @@
     }
     else
     {
-        
+        <div class="mb-5">
+
+        </div>
     }
 
     <div class="container-fluid">
@@ -62,7 +67,7 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="border-top footer text-muted" style="background-color: #F7F7F7">
         <div class="container text-center">
             &copy; 2024 - MyEmployee
         </div>

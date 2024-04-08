@@ -19,6 +19,10 @@ namespace MyEmployee.Controllers
 
         public IActionResult Index()
         {
+            if(User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Overview", "Main");
+            }
             return View();
         }
         //STI PROJECT

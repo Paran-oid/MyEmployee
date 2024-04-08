@@ -137,7 +137,7 @@ namespace MyEmployee.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
                     var defaultrole = _roleManager.FindByNameAsync("User").Result;
-
+                    HttpContext.Session.SetString("JustLoggedIn", "true");
                     if (defaultrole != null)
                     {
                         IdentityResult roleresult = await _userManager.AddToRoleAsync(user, defaultrole.Name);
