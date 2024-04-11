@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyEmployee.Data;
 
@@ -11,9 +12,11 @@ using MyEmployee.Data;
 namespace MyEmployee.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240411114317_Employee History")]
+    partial class EmployeeHistory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -357,6 +360,9 @@ namespace MyEmployee.Data.Migrations
                     b.Property<int>("EmployeeId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("EmployeeId1")
+                        .HasColumnType("int");
+
                     b.Property<DateTimeOffset>("Time")
                         .HasColumnType("datetimeoffset");
 
@@ -364,6 +370,10 @@ namespace MyEmployee.Data.Migrations
 
                     b.HasIndex("EmployeeId")
                         .IsUnique();
+
+                    b.HasIndex("EmployeeId1")
+                        .IsUnique()
+                        .HasFilter("[EmployeeId1] IS NOT NULL");
 
                     b.ToTable("EmployeeHistory");
                 });
@@ -471,10 +481,14 @@ namespace MyEmployee.Data.Migrations
             modelBuilder.Entity("MyEmployee.Models.Main_Models.EmployeeHistory", b =>
                 {
                     b.HasOne("MyEmployee.Models.Main_Models.Employee", "Employee")
-                        .WithOne("EmployeeHistory")
+                        .WithOne()
                         .HasForeignKey("MyEmployee.Models.Main_Models.EmployeeHistory", "EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("MyEmployee.Models.Main_Models.Employee", null)
+                        .WithOne("EmployeeHistory")
+                        .HasForeignKey("MyEmployee.Models.Main_Models.EmployeeHistory", "EmployeeId1");
 
                     b.Navigation("Employee");
                 });
@@ -486,8 +500,7 @@ namespace MyEmployee.Data.Migrations
 
             modelBuilder.Entity("MyEmployee.Models.Main_Models.Employee", b =>
                 {
-                    b.Navigation("EmployeeHistory")
-                        .IsRequired();
+                    b.Navigation("EmployeeHistory");
                 });
 #pragma warning restore 612, 618
         }

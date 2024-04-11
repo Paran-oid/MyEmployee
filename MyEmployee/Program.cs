@@ -18,6 +18,7 @@ builder.Services.AddDefaultIdentity<ApplicationUser>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<ILogServices, LogServices>();
+builder.Services.AddScoped<IEmployeeServices, EmployeeServices>();
 builder.Services.AddSession(options =>
 {
 

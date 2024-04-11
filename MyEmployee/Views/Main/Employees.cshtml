@@ -1,5 +1,25 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using MyEmployee.Models.Main_Models;
+@model IEnumerable<Employee>
 @{
+    ViewData["Title"] = "Employees";
 }
+<div class="container mb-3">
+    <h1>Employees</h1>
+    <div class="ms-2">
+        <a asp-controller="Main" asp-action="CreateEmployee" >add new employee</a>
+    </div>
+</div>
+<hr />
+<div class="container">
+    <div class="row">
+        @foreach (var employee in Model)
+        {
+            <div class="col-4 border border-dark p-3">
+                <div class="mb-3">
+                    <img src="~/Client Added Images/@employee.ProfilePicturePath" alt="@employee.FirstName" class="img-fluid" />
+                </div>
+                <h5 class="text-center">@employee.FirstName @employee.LastName</h5>
+            </div>
+        }
+    </div>
+</div>

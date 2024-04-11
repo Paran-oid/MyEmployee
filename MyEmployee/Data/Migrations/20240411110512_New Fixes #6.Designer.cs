@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyEmployee.Data;
 
@@ -11,9 +12,11 @@ using MyEmployee.Data;
 namespace MyEmployee.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240411110512_New Fixes #6")]
+    partial class NewFixes6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -339,35 +342,6 @@ namespace MyEmployee.Data.Migrations
                     b.ToTable("Employees");
                 });
 
-            modelBuilder.Entity("MyEmployee.Models.Main_Models.EmployeeHistory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Action")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Context")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTimeOffset>("Time")
-                        .HasColumnType("datetimeoffset");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId")
-                        .IsUnique();
-
-                    b.ToTable("EmployeeHistory");
-                });
-
             modelBuilder.Entity("MyEmployee.Models.ApplicationRole", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole");
@@ -468,26 +442,9 @@ namespace MyEmployee.Data.Migrations
                     b.Navigation("Manager");
                 });
 
-            modelBuilder.Entity("MyEmployee.Models.Main_Models.EmployeeHistory", b =>
-                {
-                    b.HasOne("MyEmployee.Models.Main_Models.Employee", "Employee")
-                        .WithOne("EmployeeHistory")
-                        .HasForeignKey("MyEmployee.Models.Main_Models.EmployeeHistory", "EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Employee");
-                });
-
             modelBuilder.Entity("MyEmployee.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Employees");
-                });
-
-            modelBuilder.Entity("MyEmployee.Models.Main_Models.Employee", b =>
-                {
-                    b.Navigation("EmployeeHistory")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
