@@ -98,6 +98,18 @@ namespace MyEmployee.Controllers
             return View("EmployeeRelated/AddEmployee", employee);
         }
 
+        [HttpGet("Main/Employees/{Id}")]
+        public async Task<IActionResult> AboutEmployee(int Id)
+        {
+            var employee = await _employeeServices.GetEmployeeById(Id);
+
+            if (employee == null)
+            {
+                return NotFound();
+            }
+            return View("EmployeeRelated/AboutEmployee", employee);
+        }
+
         //GROUPS SECTION
         public IActionResult Groups()
         {

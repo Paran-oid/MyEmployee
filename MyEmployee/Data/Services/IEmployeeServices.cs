@@ -6,5 +6,6 @@ namespace MyEmployee.Data.Services
     {
         IEnumerable<Employee> GetAll();
         Task AddEmployee(Employee employee);
+        Task<Employee> GetEmployeeById(int Id);
     }
 }

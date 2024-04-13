@@ -23,5 +23,12 @@ namespace MyEmployee.Data.Services
             _context.Employees.Add(employee);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<Employee> GetEmployeeById(int Id)
+        {
+            var employee = await _context.Employees.FirstOrDefaultAsync(e => e.Id == Id);
+            return employee;
+        }
+
     }
 }

@@ -52,7 +52,7 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="@Model.Address" class="mb-2">Address (Optional)</label>
-                    <input asp-for="@Model.Address" class="form-control" autocomplete="Address" aria-required="true" placeholder="street ##" />
+                    <input asp-for="@Model.Address" class="form-control" autocomplete="Address" aria-required="true" placeholder="Main Street, Your County, and Anytown"/>
                     <span asp-validation-for="@Model.Address" class="text-danger"></span>
                 </div>
                 <h2 class="mt-3">Summary</h2>
@@ -64,7 +64,7 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="@Model.Phone" class="mb-2">Phone</label>
-                    <input asp-for="@Model.Phone" class="form-control" autocomplete="Phone" aria-required="true" placeholder="phone" />
+                    <input asp-for="@Model.Phone" type="tel" class="form-control" autocomplete="Phone" aria-required="true" placeholder="phone" />
                     <span asp-validation-for="@Model.Phone" class="text-danger"></span>
                 </div>
                 @* Work-Related *@
@@ -72,7 +72,7 @@
                 <hr />
                 <div class="form-group">
                     <label asp-for="@Model.Salary" class="mb-2">Salary (per month)</label>
-                    <input asp-for="@Model.Salary" class="form-control" autocomplete="Salary" aria-required="true" placeholder="salary" />
+                    <input asp-for="@Model.Salary" class="form-control" autocomplete="Salary" aria-required="true" placeholder="6000" />
                     <span asp-validation-for="@Model.Salary" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -82,7 +82,7 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="@Model.Profession" class="mb-2">Profession</label>
-                    <input type="text" asp-for="@Model.Profession" class="form-control" autocomplete="Profession" aria-required="true" placeholder="profession" />
+                    <input type="text" asp-for="@Model.Profession" class="form-control" autocomplete="Profession" aria-required="true" placeholder="UI/UX designer Accountant" />
                     <span asp-validation-for="@Model.Profession" class="text-danger"></span>
                 </div>
                 <div class="form-group mb-3">

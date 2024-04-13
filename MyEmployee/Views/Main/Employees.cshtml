@@ -6,7 +6,7 @@
 <div class="container mb-3">
     <h1>Employees</h1>
     <div class="ms-2">
-        <a asp-controller="Main" asp-action="CreateEmployee" >add new employee</a>
+        <a asp-controller="Main" asp-action="CreateEmployee" >New employee</a>
     </div>
 </div>
 <hr />
@@ -14,12 +14,13 @@
     <div class="row">
         @foreach (var employee in Model)
         {
-            <div class="col-4 border border-dark p-3">
+            <div class="col-3 border border-dark p-3 me-3 border-">
                 <div class="mb-3">
-                    <img src="~/Client Added Images/@employee.ProfilePicturePath" alt="@employee.FirstName" class="img-fluid" />
+                    <a asp-action="AboutEmployee" asp-route-id="@employee.Id" ><img src="~/Client Added Images/@employee.ProfilePicturePath" alt="@employee.FirstName" class="img-fluid" /></a>
                 </div>
-                <h5 class="text-center">@employee.FirstName @employee.LastName</h5>
+                <a asp-action="AboutEmployee" asp-route-id="@employee.Id" style="text-decoration: none; color:black;" ><h5 class="text-center">@employee.FirstName @employee.LastName</h5></a>
             </div>
         }
+        @* hello *@
     </div>
 </div>
