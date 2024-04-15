@@ -3,4 +3,25 @@
 @{
     ViewData["Title"] = $"{Model.FirstName} {Model.LastName}";
 }
+<h1>About @Model.FirstName @Model.LastName</h1>
+<div class="container">
+    <div class="row">
+            <div class="col-md-6">
+                <img src="~/Client Added Images/@Model.ProfilePicturePath" alt="Employee Profile Picture" />
+            </div>
+            <div class="col-md-6">
+                <h3>General Information:</h3>
+                <hr />
+                <div class="offset-2">
+                    <div class="d-flex justify-content-between">
+                        <p><span style="font-weight: bold">First Name:</span> @Model.FirstName</p>
+                        <p><span style="font-weight: bold">Last Name:</span> @Model.LastName</p>
+                    </div>
+                    <p><span style="font-weight: bold">Phone Number:</span> @Model.Phone</p>
+                    <p><span style="font-weight: bold">Email Address:</span> @Model.Email</p>
+                    <p><span style="font-weight: bold">Birthday</span> @Model.DateOfBirth</p>
+                </div>
+            </div>
+    </div>
+</div>
 
