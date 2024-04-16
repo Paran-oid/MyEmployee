@@ -7,21 +7,43 @@
 <div class="container">
     <div class="row">
             <div class="col-md-6">
-                <img src="~/Client Added Images/@Model.ProfilePicturePath" alt="Employee Profile Picture" />
+                <img src="~/Client Added Images/@Model.ProfilePicturePath" style="width: 80%" alt="Employee Profile Picture" />
             </div>
             <div class="col-md-6">
                 <h3>General Information:</h3>
                 <hr />
-                <div class="offset-2">
-                    <div class="d-flex justify-content-between">
+                <div class="offset-1">
+                    <div class="d-flex">
                         <p><span style="font-weight: bold">First Name:</span> @Model.FirstName</p>
-                        <p><span style="font-weight: bold">Last Name:</span> @Model.LastName</p>
+                        <p class="offset-2"><span style="font-weight: bold">Last Name:</span> @Model.LastName</p>
                     </div>
                     <p><span style="font-weight: bold">Phone Number:</span> @Model.Phone</p>
                     <p><span style="font-weight: bold">Email Address:</span> @Model.Email</p>
                     <p><span style="font-weight: bold">Birthday</span> @Model.DateOfBirth</p>
                 </div>
             </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Work Related Information:</h3>
+            <hr />
+            <p><span style="font-weight: bold">Profession:</span><br /> @Model.Profession</p>
+            <p><span style="font-weight: bold">Employment Status:</span><br /> @Model.EmploymentStatus</p>
+            <p><span style="font-weight: bold">Hire Date:</span><br /> @Model.HireDate</p>
+        </div>
+        <div class="col-md-6">
+            <h3>Other:</h3>
+            <hr />
+            @if (!string.IsNullOrEmpty(Model.Description))
+            {
+                <p style="padding: 50px; border: 1px solid; border-radius: 15px">@Model.Description</p>
+            }
+            else
+            {
+                <p class="text-center">No Description Provided</p>
+            }
+        </div>
+        @* keep working here *@
     </div>
 </div>
 
