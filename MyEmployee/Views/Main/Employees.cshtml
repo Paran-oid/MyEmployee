@@ -5,6 +5,12 @@
 }
 <div class="container mb-3">
     <h1>Employees</h1>
+    @if (!string.IsNullOrEmpty((string?)ViewData["Result"]))
+    {
+        <div class="text-center bg-success">
+            <p>@ViewData["Result"]</p>
+        </div>
+    }
     <div class="ms-2">
         <a asp-controller="Main" asp-action="CreateEmployee" >New employee</a>
     </div>
@@ -13,10 +19,10 @@
 <div class="container">
     <div class="row">
         @foreach (var employee in Model)
-        {
+        {  
             <div class="col-3 border border-dark p-3 me-3 border-">
                 <div class="mb-3">
-                    <a asp-action="AboutEmployee" asp-route-id="@employee.Id" ><img src="~/Client Added Images/@employee.ProfilePicturePath" alt="@employee.FirstName" class="img-fluid" /></a>
+                    <a asp-action="AboutEmployee" asp-route-id="@employee.Id" ><img src="~/Client Added Images/@employee.ProfilePicturePath" alt="@employee.FirstName" class="img-fluid" style="max-height: 200px" /></a>
                 </div>
                 <a asp-action="AboutEmployee" asp-route-id="@employee.Id" style="text-decoration: none; color:black;" ><h5 class="text-center">@employee.FirstName @employee.LastName</h5></a>
             </div>

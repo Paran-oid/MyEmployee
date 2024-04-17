@@ -36,14 +36,23 @@
             <hr />
             @if (!string.IsNullOrEmpty(Model.Description))
             {
-                <p style="padding: 50px; border: 1px solid; border-radius: 15px">@Model.Description</p>
+                <p style="padding-bottom: 10%; border: 1px solid; border-radius: 15px;" class="text-start ps-2 pt-1">@Model.Description</p>
             }
             else
             {
-                <p class="text-center">No Description Provided</p>
+                <p style="padding-bottom: 10%; border: 1px solid; border-radius: 15px;" class="text-start ps-2 pt-1">No Description Provided</p>
             }
+            <p><span style="font-weight: bold">Salary:</span><br /> <span style="color: green">@Model.Salary €/Month</span></p>
         </div>
-        @* keep working here *@
+    </div>
+    <div class="row mt-3">
+        <div class="col d-flex">
+            <button class="btn btn-success">Employee History</button>
+            <form asp-action="DeleteEmployee" asp-controller="Main" asp-route-id ="@Model.Id" method="post">
+                <input type="hidden" value="@Model.Id"/>
+                <button class="btn btn-danger">Delete</button>
+            </form>
+        </div>
     </div>
 </div>
 

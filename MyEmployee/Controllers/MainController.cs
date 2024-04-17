@@ -110,6 +110,21 @@ namespace MyEmployee.Controllers
             return View("EmployeeRelated/AboutEmployee", employee);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> DeleteEmployee(int Id)
+        {
+            var employee = await _employeeServices.GetEmployeeById(Id);
+            if(employee == null)
+            {
+                return NotFound();
+            }
+
+            await _employeeServices.DeleteEmployee(employee);
+
+            ViewData["Result"] = $"{employee.FirstName} was deleted";
+            return RedirectToAction("Employees");
+        }
+
         //GROUPS SECTION
         public IActionResult Groups()
         {
