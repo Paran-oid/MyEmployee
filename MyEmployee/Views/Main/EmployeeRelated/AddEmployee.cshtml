@@ -2,9 +2,14 @@
 @using Microsoft.AspNetCore.Identity;
 @inject UserManager<ApplicationUser> _userManager;
 @model EmployeeVM
+
+@* Builders *@
 @{
     ViewData["Title"] = "New Employee";
 }
+<link rel="stylesheet" href="~/css/Phone/intlTelInput.css" />
+<script src="~/js/Phone/intlTelInput.js"></script>
+@* CODE *@
 <h1>Create Employee</h1>
 <div class="container">
     <div class="col-md-6">
@@ -62,9 +67,8 @@
                     <textarea asp-for="@Model.Description" class="form-control" autocomplete="Description" aria-required="true" placeholder="enter information about your employee"></textarea>
                     <span asp-validation-for="@Model.Description" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="@Model.Phone" class="mb-2">Phone</label>
-                    <input asp-for="@Model.Phone" type="tel" class="form-control" autocomplete="Phone" aria-required="true" placeholder="phone" />
+                <div class="form-group mt-3">
+                    <input asp-for="@Model.Phone" type="tel" class="form-control" id="phone" autocomplete="Phone" aria-required="true" placeholder="Phone Number" />
                     <span asp-validation-for="@Model.Phone" class="text-danger"></span>
                 </div>
                 @* Work-Related *@
@@ -106,3 +110,9 @@
         </form>
     </div>
 </div>
+<script>
+    const input = document.querySelector("#phone");
+    window.intlTelInput(input, {
+        utilsScript: "@Url.Content("~/js/Phone/utils.js")"
+    });
+</script>
