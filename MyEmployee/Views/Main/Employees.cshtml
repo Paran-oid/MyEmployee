@@ -21,12 +21,11 @@
         @foreach (var employee in Model)
         {  
             <div class="col-3 border border-dark p-3 me-3 border-">
-                <div class="mb-3">
-                    <a asp-action="AboutEmployee" asp-route-id="@employee.Id" ><img src="~/Client Added Images/@employee.ProfilePicturePath" alt="@employee.FirstName" class="img-fluid" style="max-height: 200px" /></a>
+                <div class="mb-3 text-center">
+                    <a asp-action="AboutEmployee" asp-route-id="@employee.Id" ><img src="~/Client Added Images/@employee.ProfilePicturePath" alt="@employee.FirstName" class="img-fluid" style="max-height: 250px" /></a>
                 </div>
                 <a asp-action="AboutEmployee" asp-route-id="@employee.Id" style="text-decoration: none; color:black;" ><h5 class="text-center">@employee.FirstName @employee.LastName</h5></a>
             </div>
         }
-        @* hello *@
     </div>
 </div>
