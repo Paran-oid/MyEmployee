@@ -125,6 +125,90 @@ namespace MyEmployee.Controllers
             return RedirectToAction("Employees");
         }
 
+        [HttpGet("Main/EditEmployee/{Id}")]
+        public async Task<IActionResult> EditEmployee(int Id)
+        {
+            var employee = await _employeeServices.GetEmployeeById(Id);
+            if (employee == null)
+            {
+                return NotFound();
+            }
+
+            //profile picture here
+            var profilePictureFile = System.IO.File.OpenRead(employee.ProfilePicturePath);
+            var profilePicture = new FormFile(profilePictureFile, 0, profilePictureFile.Length, null, Path.GetFileName(profilePictureFile.Name));
+            //employeevm here
+            var employeeVM = new EmployeeVM
+            {
+                Id = employee.Id,
+                FirstName = employee.FirstName,
+                LastName = employee.LastName,
+                ProfilePicture = profilePicture,
+                DateOfBirth = employee.DateOfBirth,
+                Gender = employee.Gender,
+                Address = employee.Address,
+                Email = employee.Email,
+                Phone = employee.Phone,
+                Description = employee.Description,
+                Salary = employee.Salary,
+                HireDate = employee.HireDate,
+                Profession = employee.Profession,
+                EmploymentStatus = employee.EmploymentStatus,
+                ManagerId = employee.ManagerId,
+                Manager = employee.Manager
+
+            };
+
+            return View("EmployeeRelated/EditEmployee", employeeVM);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditEmployee(int Id, EmployeeVM employee)
+        {
+            var temp = _employeeServices.GetEmployeeById(Id);
+            if (temp == null)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                var uploadDir = Path.Combine(_webHostEnvironment.WebRootPath, "Client Added Images");
+                string FileName = employee.ProfilePicture.FileName;
+                string FilePath = Path.Combine(uploadDir, FileName);
+
+                using( var fileStream = new FileStream(FilePath, FileMode.Create))
+                {
+                    employee.ProfilePicture.CopyTo(fileStream);
+                }
+
+                Employee newemployee = new Employee
+                {
+                    FirstName = employee.FirstName,
+                    LastName = employee.LastName,
+                    ProfilePicturePath = FileName,
+                    DateOfBirth = employee.DateOfBirth,
+                    Gender = employee.Gender,
+                    Address = employee.Address,
+                    Email = employee.Email,
+                    Phone = employee.Phone,
+                    Description = employee.Description,
+                    Salary = employee.Salary,
+                    HireDate = employee.HireDate,
+                    Profession = employee.Profession,
+                    EmploymentStatus = employee.EmploymentStatus,
+                    ManagerId = employee.ManagerId
+                };
+
+                await _employeeServices.UpdateEmployee(newemployee);
+                return RedirectToAction("Employees");
+            }
+            catch (Exception e)
+            {
+                return Conflict($"{e}");
+            }
+        }
+
         //GROUPS SECTION
         public IActionResult Groups()
         {

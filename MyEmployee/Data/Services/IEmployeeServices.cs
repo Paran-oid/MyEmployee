@@ -8,5 +8,6 @@ namespace MyEmployee.Data.Services
         Task AddEmployee(Employee employee);
         Task<Employee> GetEmployeeById(int Id);
         Task DeleteEmployee(Employee employee);
+        Task UpdateEmployee(Employee employee);
     }
 }

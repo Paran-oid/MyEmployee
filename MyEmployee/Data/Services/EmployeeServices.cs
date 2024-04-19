@@ -35,5 +35,11 @@ namespace MyEmployee.Data.Services
             _context.Employees.Remove(employee);
             await _context.SaveChangesAsync();
         }
+
+        public async Task UpdateEmployee(Employee employee)
+        {
+            _context.Employees.Update(employee);
+            await _context.SaveChangesAsync();
+        }
     }
 }
