@@ -135,9 +135,10 @@ namespace MyEmployee.Controllers
             }
 
             //profile picture here
-            var profilePictureFile = System.IO.File.OpenRead(employee.ProfilePicturePath);
-            var profilePicture = new FormFile(profilePictureFile, 0, profilePictureFile.Length, null, Path.GetFileName(profilePictureFile.Name));
-            //employeevm here
+            //we took user's image path first in image variable, then we openeed the file directly, then profile picture gets the new profile picture basically
+            var image = Path.Combine(_webHostEnvironment.WebRootPath, "Client Added Images", employee.ProfilePicturePath);
+            var profilePictureFile = System.IO.File.OpenRead(image);
+            var profilePicture = new FormFile(profilePictureFile, 0, profilePictureFile.Length, null, Path.GetFileName(image));
             var employeeVM = new EmployeeVM
             {
                 Id = employee.Id,
@@ -158,15 +159,14 @@ namespace MyEmployee.Controllers
                 Manager = employee.Manager
 
             };
-            //
             return View("EmployeeRelated/EditEmployee", employeeVM);
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditEmployee(int Id, EmployeeVM employee)
+        public async Task<IActionResult> EditEmployee(int Id, EmployeeVM model)
         {
-            var temp = _employeeServices.GetEmployeeById(Id);
-            if (temp == null)
+            var employee = await _employeeServices.GetEmployeeById(Id);
+            if (employee == null)
             {
                 return NotFound();
             }
@@ -174,33 +174,41 @@ namespace MyEmployee.Controllers
             try
             {
                 var uploadDir = Path.Combine(_webHostEnvironment.WebRootPath, "Client Added Images");
-                string FileName = employee.ProfilePicture.FileName;
-                string FilePath = Path.Combine(uploadDir, FileName);
 
-                using( var fileStream = new FileStream(FilePath, FileMode.Create))
+                if (model.ProfilePicture != null)
                 {
-                    employee.ProfilePicture.CopyTo(fileStream);
+                    //create the new file
+                    string FileName = model.ProfilePicture.FileName;
+                    string FilePath = Path.Combine(uploadDir, FileName);
+                    if (System.IO.File.Exists(FilePath))
+                    {
+                        employee.ProfilePicturePath = FileName;
+                    }
+                    else
+                    {
+                        using (var fileStream = new FileStream(FilePath, FileMode.Create))
+                        {
+                            model.ProfilePicture.CopyTo(fileStream);
+                        }
+                        employee.ProfilePicturePath = FileName;
+                    }
                 }
 
-                Employee newemployee = new Employee
-                {
-                    FirstName = employee.FirstName,
-                    LastName = employee.LastName,
-                    ProfilePicturePath = FileName,
-                    DateOfBirth = employee.DateOfBirth,
-                    Gender = employee.Gender,
-                    Address = employee.Address,
-                    Email = employee.Email,
-                    Phone = employee.Phone,
-                    Description = employee.Description,
-                    Salary = employee.Salary,
-                    HireDate = employee.HireDate,
-                    Profession = employee.Profession,
-                    EmploymentStatus = employee.EmploymentStatus,
-                    ManagerId = employee.ManagerId
-                };
 
-                await _employeeServices.UpdateEmployee(newemployee);
+                employee.FirstName = model.FirstName ;
+                employee.LastName = model.LastName;
+                employee.DateOfBirth = model.DateOfBirth;
+                employee.Gender = model.Gender;
+                employee.Address = model.Address;
+                employee.Email = model.Email;
+                employee.Phone = model.Phone;
+                employee.Description = model.Description;
+                employee.Salary = model.Salary;
+                employee.HireDate = model.HireDate;
+                employee.Profession = model.Profession;
+                employee.EmploymentStatus = model.EmploymentStatus;
+
+                await _employeeServices.UpdateEmployee(employee);
                 return RedirectToAction("Employees");
             }
             catch (Exception e)
