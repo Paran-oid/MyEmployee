@@ -3,16 +3,34 @@
 @{
     ViewData["Title"] = "Employees";
 }
+<style>
+    .search 
+    {
+        border-radius: 10px;
+        border: 1px solid;
+        padding: 5px;
+    }
+    .search:active, .search:focus
+    {
+        border: 1px solid;
+    }
+</style>
 <div class="container mb-3">
     <h1>Employees</h1>
-    @if (!string.IsNullOrEmpty((string?)ViewData["Result"]))
+    @if (!string.IsNullOrEmpty((string?)TempData["Result"]))
     {
-        <div class="text-center bg-success">
-            <p>@ViewData["Result"]</p>
+        <div>
+            <p style="color: green;">@TempData["Result"]</p>
         </div>
     }
-    <div class="ms-2">
+    <div class="ms-2 d-flex justify-content-between">
         <a asp-controller="Main" asp-action="CreateEmployee" >New employee</a>
+        <form asp-controller="Main" asp-action="Employees" method="get">
+            <div class="d-flex">
+                <input type="text" name="searchString" class="search"/>
+                <button type="submit" style="border: none; background-color: transparent;"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>       
+        </form>
     </div>
 </div>
 <hr />
@@ -20,11 +38,12 @@
     <div class="row">
         @foreach (var employee in Model)
         {  
-            <div class="col-3 border border-dark p-3 me-3 border-">
+            <div class="col-3  p-3 me-3 border-">
                 <div class="mb-3 text-center">
-                    <a asp-action="AboutEmployee" asp-route-id="@employee.Id" ><img src="~/Client Added Images/@employee.ProfilePicturePath" alt="@employee.FirstName" class="img-fluid" style="max-height: 250px" /></a>
+                    <a asp-action="AboutEmployee" asp-route-id="@employee.Id" ><img src="~/Client Added Images/@employee.ProfilePicturePath" alt="@employee.FirstName" class="img-fluid" style="height: 250px" /></a>
                 </div>
                 <a asp-action="AboutEmployee" asp-route-id="@employee.Id" style="text-decoration: none; color:black;" ><h5 class="text-center">@employee.FirstName @employee.LastName</h5></a>
+                <p class="text-success text-center" style="font-size: 20px">@employee.Profession</p>
             </div>
         }
     </div>

@@ -1,15 +1,21 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using MyEmployee.Data.Migrations;
+using MyEmployee.Models;
 using MyEmployee.Models.Main_Models;
+using System.Security.Claims;
 
 namespace MyEmployee.Data.Services
 {
     public class EmployeeServices : IEmployeeServices
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public EmployeeServices(ApplicationDbContext context)
+        public EmployeeServices(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public IEnumerable<Employee> GetAll()
@@ -40,6 +46,13 @@ namespace MyEmployee.Data.Services
         {
             _context.Employees.Update(employee);
             await _context.SaveChangesAsync();
+        }
+
+        public IEnumerable<Employee> GetEmployees(string managerId)
+        {
+            var employees = _context.Employees
+            .Where(e => e.ManagerId == managerId);
+            return employees;
         }
     }
 }

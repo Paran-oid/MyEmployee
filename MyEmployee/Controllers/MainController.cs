@@ -1,13 +1,16 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Azure;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MyEmployee.Data.Services;
 using MyEmployee.Models;
 using MyEmployee.Models.Main_Models;
+using System.Security.Claims;
 
 namespace MyEmployee.Controllers
 {
     public class MainController : Controller
     {
+        //we use the one below to get the current user Id and other stuff for managing current user
         private readonly IHttpContextAccessor _httpContextAccesor;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmployeeServices _employeeServices;
@@ -43,9 +46,22 @@ namespace MyEmployee.Controllers
         //EMPLOYEES SECTION
 
         [HttpGet]
-        public async Task<IActionResult> Employees()
+        public async Task<IActionResult> Employees(string searchString)
         {
-            var employees = _employeeServices.GetAll();
+            //with this we will get the user Id through the dependency injection
+            var userId = _httpContextAccesor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            IEnumerable<Employee> employees = _employeeServices.GetEmployees(userId);
+
+            if(!string.IsNullOrEmpty(searchString))
+            {
+                employees = _employeeServices
+                    .GetEmployees(userId)
+                    .Where(e => e.FirstName.Contains(searchString, StringComparison.OrdinalIgnoreCase) 
+                             || e.LastName.Contains(searchString, StringComparison.OrdinalIgnoreCase)
+                             || e.Profession.Contains(searchString, StringComparison.OrdinalIgnoreCase));
+            }
+
             return View(employees);
         }
 
@@ -209,6 +225,7 @@ namespace MyEmployee.Controllers
                 employee.EmploymentStatus = model.EmploymentStatus;
 
                 await _employeeServices.UpdateEmployee(employee);
+                TempData["Result"] = $"{employee.FirstName} was modified";
                 return RedirectToAction("Employees");
             }
             catch (Exception e)

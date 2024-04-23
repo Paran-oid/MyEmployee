@@ -3,7 +3,10 @@
 @{
     ViewData["Title"] = $"{Model.FirstName} {Model.LastName}";
 }
-<h1>About @Model.FirstName @Model.LastName</h1>
+<h1>
+    @Model.FirstName @Model.LastName
+    <a asp-action="EditEmployee" asp-controller="Main" asp-route-id="@Model.Id" style="color: black; text-decoration: none;"><img src="~/Site Images/Main/pencil.png" alt="edit" style="height:65px" /></a>
+</h1>
 <div class="container">
     <div class="row">
             <div class="col-md-6">
@@ -43,15 +46,16 @@
                 <p style="padding-bottom: 10%; border: 1px solid; border-radius: 15px;" class="text-start ps-2 pt-1">No Description Provided</p>
             }
             <p><span style="font-weight: bold">Salary:</span><br /> <span style="color: green">@Model.Salary €/Month</span></p>
-            <a asp-action="EditEmployee" asp-controller="Main" asp-route-id="@Model.Id" style="color: black; text-decoration: none;"><img src="~/Site Images/Main/pencil.png" alt="edit" style="height:65px" /> Edit</a>
+            <button class="btn btn-success">Promote</button>
+            <button class="btn btn-danger">Demote</button>
         </div>
     </div>
     <div class="row mt-3">
         <div class="col d-flex">
-            <button class="btn btn-success me-3">Employee History</button>
+            <button class="btn btn-dark me-2">Employee History</button>
             <form asp-action="DeleteEmployee" asp-controller="Main" asp-route-id ="@Model.Id" method="post">
                 <input type="hidden" value="@Model.Id"/>
-                <button class="btn btn-danger">Delete</button>
+                <button class="btn btn-secondary">Delete</button>
             </form>
         </div>
     </div>

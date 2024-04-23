@@ -6,7 +6,7 @@
     string message = (string?)TempData["message"];
     int numUsers = Model.ToList().Count;
     //we check if numusers - 1 >=0 if yes we put num users - 1 else we put 0
-    int temp = numUsers - 1 > 0 ? numUsers - 1 : 1;
+    int temp = numUsers;
 
 }
 <link rel="stylesheet" href="~/css/AdminTable.css" />
@@ -46,9 +46,8 @@
         </form>
     </div>
 </div>
-@if (!Model.Any() || numUsers < 1)
+@if (!Model.Any())
 {
-    <p>@temp found</p>
     <p>No result</p>
 }
 else

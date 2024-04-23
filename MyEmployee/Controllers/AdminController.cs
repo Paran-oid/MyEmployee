@@ -8,6 +8,7 @@ using MyEmployee.Data.Services;
 using MyEmployee.Models;
 using MyEmployee.Models.Admin_Management;
 using System.Data;
+using System.Security.Claims;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MyEmployee.Controllers
@@ -18,14 +19,16 @@ namespace MyEmployee.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly ILogServices _logServices;
+        private readonly IHttpContextAccessor _httpContextAccesor;
 
-        public AdminController(RoleManager<ApplicationRole> roleManager, UserManager<ApplicationUser> userManager, ILogServices logServices)
+        public AdminController(RoleManager<ApplicationRole> roleManager, UserManager<ApplicationUser> userManager, ILogServices logServices, IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _logServices = logServices;
+            _httpContextAccesor = httpContextAccessor;
 
-        }
+    }
         //INDEX PAGE
         public IActionResult Index()
         {
@@ -39,13 +42,19 @@ namespace MyEmployee.Controllers
         public async Task<IActionResult> ManageUsers(string? searchString)
         {
             List<ApplicationUser> users;
+            var currentUserId = _httpContextAccesor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
             if (!string.IsNullOrEmpty(searchString))
             {
-                 users = await _userManager.Users.Where(u => u.UserName.Contains(searchString)).ToListAsync();
+                 users = await _userManager.Users.Where(u => u.UserName.Contains(searchString)
+                                                          || u.Email.Contains(searchString)
+                                                          && u.Id != currentUserId)
+                                                 .ToListAsync();
             }
             else
             {
-                 users = await _userManager.Users.ToListAsync();
+                 users = await _userManager.Users.Where(u => u.Id != currentUserId)
+                                                 .ToListAsync();
 
             }
             return View(users);
