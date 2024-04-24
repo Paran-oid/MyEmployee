@@ -4,8 +4,8 @@
     var currentpage = Context.Request.Path + Context.Request.QueryString;
     List<string> temp = new List<string>() { "Puissance", "PPCM", "PGCD" };
 }
-<h1 class="mb-5">@ViewData["Title"]</h1>
-@ViewData["Error"]
+<h1 class="mb-5"><img src="~/Site Images/Main/STI/js-icon.png" style="height: 50px;"/> Functions</h1>
+@TempData["Error"]
 <div class="container">
     <div class="row">
         @foreach (var item in Model)

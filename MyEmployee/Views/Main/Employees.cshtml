@@ -24,10 +24,10 @@
         </div>
     }
     <div class="ms-2 d-flex justify-content-between">
-        <a asp-controller="Main" asp-action="CreateEmployee" >New employee</a>
+        <a asp-controller="Main" asp-action="CreateEmployee" style=" text-decoration: none;"><img src="~/Site Images/Main/plus.png" style="height: 20px" /> <span style="color: green;">New Employee</span></a>
         <form asp-controller="Main" asp-action="Employees" method="get">
             <div class="d-flex">
-                <input type="text" name="searchString" class="search"/>
+                <input type="text" name="searchString" placeholder="Search Employee" class="search"/>
                 <button type="submit" style="border: none; background-color: transparent;"><i class="fa-solid fa-magnifying-glass"></i></button>
             </div>       
         </form>

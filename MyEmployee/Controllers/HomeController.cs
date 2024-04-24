@@ -49,7 +49,7 @@ namespace MyEmployee.Controllers
             }
             catch (Exception e)
             {
-                ViewData["error"] = "Error has occured loading the buttons";
+                TempData["error"] = "Error has occured loading the buttons";
                 return View();
             }
         }
