@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MyEmployee.Data.Services;
+using MyEmployee.Data.Services.EmployeeRelated;
 using MyEmployee.Models;
 using MyEmployee.Models.Main_Models;
 using System.Security.Claims;
@@ -14,13 +15,19 @@ namespace MyEmployee.Controllers
         private readonly IHttpContextAccessor _httpContextAccesor;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmployeeServices _employeeServices;
+        private readonly IEmployeeHistoryServices _employeeHistoryServices;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public MainController(IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager, IEmployeeServices employeeServices, IWebHostEnvironment webHostEnvironment)
+        public MainController(IHttpContextAccessor httpContextAccessor,
+                              UserManager<ApplicationUser> userManager,
+                              IEmployeeServices employeeServices,
+                              IWebHostEnvironment webHostEnvironment,
+                              IEmployeeHistoryServices employeeHistoryServices)
         {
             _httpContextAccesor = httpContextAccessor;
             _userManager = userManager;
             _employeeServices = employeeServices;
             _webHostEnvironment = webHostEnvironment;
+            _employeeHistoryServices = employeeHistoryServices;
         }
 
         //FUNCTIONS
@@ -74,7 +81,7 @@ namespace MyEmployee.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateEmployee(EmployeeVM employee)
         {
-            if (employee.ProfilePicture != null)
+            if (ModelState.IsValid)
             {
                 string UploadDir = Path.Combine(_webHostEnvironment.WebRootPath, "Client Added Images");
                 if(!Directory.Exists(UploadDir))
@@ -93,7 +100,7 @@ namespace MyEmployee.Controllers
                 {
                     FirstName = employee.FirstName,
                     LastName = employee.LastName,
-                    ProfilePicturePath = FileName, 
+                    ProfilePicturePath = FileName,
                     DateOfBirth = employee.DateOfBirth,
                     Gender = employee.Gender,
                     Address = employee.Address,
@@ -104,7 +111,7 @@ namespace MyEmployee.Controllers
                     HireDate = employee.HireDate,
                     Profession = employee.Profession,
                     EmploymentStatus = employee.EmploymentStatus,
-                    ManagerId = employee.ManagerId
+                    ManagerId = employee.ManagerId,
                 };
 
                 await _employeeServices.AddEmployee(newEmployee);
@@ -172,7 +179,6 @@ namespace MyEmployee.Controllers
                 Profession = employee.Profession,
                 EmploymentStatus = employee.EmploymentStatus,
                 ManagerId = employee.ManagerId,
-                Manager = employee.Manager
 
             };
             return View("EmployeeRelated/EditEmployee", employeeVM);
@@ -190,7 +196,6 @@ namespace MyEmployee.Controllers
             try
             {
                 var uploadDir = Path.Combine(_webHostEnvironment.WebRootPath, "Client Added Images");
-
                 if (model.ProfilePicture != null)
                 {
                     //create the new file
@@ -209,8 +214,7 @@ namespace MyEmployee.Controllers
                         employee.ProfilePicturePath = FileName;
                     }
                 }
-
-
+                //updating employee's information
                 employee.FirstName = model.FirstName ;
                 employee.LastName = model.LastName;
                 employee.DateOfBirth = model.DateOfBirth;
@@ -224,7 +228,20 @@ namespace MyEmployee.Controllers
                 employee.Profession = model.Profession;
                 employee.EmploymentStatus = model.EmploymentStatus;
 
+                //logging
+                var log = new EmployeeHistory
+                {
+                    Action = $"{employee.FirstName} was edited",
+                    Type = "Information",
+                    Time = DateTime.Now,
+                    EmployeeId = employee.Id
+                };
+
+                //database modification
+                await _employeeHistoryServices.Log(log);
                 await _employeeServices.UpdateEmployee(employee);
+
+                //result
                 TempData["Result"] = $"{employee.FirstName} was modified";
                 return RedirectToAction("Employees");
             }

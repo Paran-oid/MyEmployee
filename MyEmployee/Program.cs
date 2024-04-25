@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MyEmployee.Data;
 using MyEmployee.Data.Services;
+using MyEmployee.Data.Services.EmployeeRelated;
 using MyEmployee.Models;
 using System.Data;
 
@@ -19,6 +20,7 @@ builder.Services.AddDefaultIdentity<ApplicationUser>()
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<ILogServices, LogServices>();
 builder.Services.AddScoped<IEmployeeServices, EmployeeServices>();
+builder.Services.AddScoped<IEmployeeHistoryServices, EmployeeHistoryServices>();
 builder.Services.AddSession(options =>
 {
 
